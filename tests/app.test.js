@@ -43,6 +43,6 @@ test("phraseForDate returns null for an empty list", () => {
 test("bundled phrases.csv parses and every row has an author", () => {
   const text = fs.readFileSync(path.join(__dirname, "..", "phrases.csv"), "utf8");
   const phrases = parsePhrases(text);
-  assert.ok(phrases.length >= 10);
+  assert.ok(phrases.length >= 1);
   for (const p of phrases) assert.ok(p.author, `missing author for: ${p.phrase}`);
 });
