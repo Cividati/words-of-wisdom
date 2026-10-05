@@ -27,7 +27,13 @@ Browsers block reading files from disk, so serve the folder over HTTP:
 npm start        # or: python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. It also works as-is on GitHub Pages.
+Then open http://localhost:8000.
+
+## Publishing
+
+Every push to `main` runs the tests and deploys the site to GitHub Pages at
+https://cividati.github.io/words-of-wisdom/ (see `.github/workflows/pages.yml`).
+One-time setup: in the repo's Settings → Pages, set **Source** to **GitHub Actions**.
 
 ## Tests
 
