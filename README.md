@@ -22,10 +22,12 @@ phrase,author
 "Well done is better than well said.",Benjamin Franklin
 ```
 
-## iPhone
+## Phones
 
-- **Home Screen icon:** open the site in Safari, tap Share, then
-  **Add to Home Screen**. It opens full screen like an app.
+- **Home Screen icon:** on a phone the site shows an **Add to my Home Screen**
+  button (`install.js`). On Android Chrome it installs in one tap; on iPhone
+  it shows the three Safari steps (Share, **Add to Home Screen**, **Add**). It
+  hides on desktop, once installed, or after **Not now**.
 - **Home Screen widget:** install the free [Scriptable](https://scriptable.app)
   app, create a new script, paste in [`widget/scriptable.js`](widget/scriptable.js)
   (also served at https://cividati.github.io/words-of-wisdom/widget/scriptable.js),

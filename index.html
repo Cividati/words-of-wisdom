@@ -52,6 +52,42 @@
     blockquote { margin: 0; }
     #phrase { margin: 0; font-size: clamp(1.5rem, 4vw, 2.25rem); line-height: 1.35; }
     #author { margin: 1.25rem 0 0; color: var(--muted); font-style: italic; font-size: 1.1rem; }
+    #install {
+      margin: 3rem auto 0;
+      max-width: 22rem;
+      font: 1rem/1.5 system-ui, sans-serif;
+    }
+    #install-button {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 0;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font: 600 1.05rem/1.2 system-ui, sans-serif;
+      cursor: pointer;
+    }
+    #install-help {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      text-align: left;
+    }
+    #install-steps { margin: 0; padding-left: 1.25rem; }
+    #install-steps li + li { margin-top: 0.5rem; }
+    .share-icon { width: 1.2em; height: 1.2em; vertical-align: -0.2em; color: #007aff; }
+    #install-dismiss {
+      margin-top: 0.75rem;
+      border: 0;
+      background: none;
+      color: var(--muted);
+      font: 0.9rem system-ui, sans-serif;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -62,7 +98,15 @@
       <p id="phrase">Loading…</p>
       <footer id="author"></footer>
     </blockquote>
+    <section id="install" hidden>
+      <button id="install-button" type="button">Add to my Home Screen</button>
+      <div id="install-help" hidden>
+        <ol id="install-steps"></ol>
+      </div>
+      <button id="install-dismiss" type="button">Not now</button>
+    </section>
   </main>
   <script src="app.js"></script>
+  <script src="install.js"></script>
 </body>
 </html>
