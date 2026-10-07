@@ -27,7 +27,7 @@ jobs:
       - name: Collect site files
         run: |
           mkdir _site
-          cp -r index.html app.js phrases.csv manifest.webmanifest icons widget _site/
+          cp -r index.html app.js install.js phrases.csv manifest.webmanifest icons widget _site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

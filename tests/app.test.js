@@ -106,3 +106,18 @@ test("manifest lists icons that exist", () => {
   for (const icon of manifest.icons) assert.ok(fs.existsSync(path.join(root, icon.src)), icon.src);
   assert.ok(fs.existsSync(path.join(root, "icons", "apple-touch-icon.png")));
 });
+
+test("install help picks the right phone and skips desktop and installed apps", () => {
+  const { installPlatform, STEPS } = require("../install.js");
+  const iphone = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Safari/604.1";
+  const ipad = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15";
+  const android = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/129.0 Mobile Safari/537.36";
+  const desktop = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/129.0 Safari/537.36";
+  assert.equal(installPlatform(iphone, 5, false), "ios");
+  assert.equal(installPlatform(ipad, 5, false), "ios");
+  assert.equal(installPlatform(ipad, 0, false), null);
+  assert.equal(installPlatform(android, 5, false), "android");
+  assert.equal(installPlatform(desktop, 0, false), null);
+  assert.equal(installPlatform(iphone, 5, true), null);
+  assert.ok(STEPS.ios.length && STEPS.android.length);
+});
