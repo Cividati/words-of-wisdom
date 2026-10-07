@@ -66,10 +66,52 @@ function dayNumber(date) {
   return Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
 }
 
-// Everyone sees the same phrase on the same day; it cycles through the list in order.
+// Small seeded random number generator (mulberry32), so every visitor
+// computes the same shuffle.
+function seededRandom(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// The order of phrase indexes for one cycle: a shuffle of 0..count-1
+// seeded by the cycle number and the list size.
+function shuffledOrder(count, cycle) {
+  const order = Array.from({ length: count }, (_, i) => i);
+  const random = seededRandom(Math.imul(cycle, 2654435761) ^ count);
+  for (let i = count - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+// Order for a cycle, adjusted so it never starts with the phrase that
+// ended the previous cycle (no same phrase two days in a row).
+// With two phrases, simply alternating is the only order that never repeats.
+function cycleOrder(count, cycle) {
+  if (count === 2) return [0, 1];
+  const order = shuffledOrder(count, cycle);
+  if (count > 2) {
+    const previous = shuffledOrder(count, cycle - 1);
+    if (order[0] === previous[count - 1]) [order[0], order[1]] = [order[1], order[0]];
+  }
+  return order;
+}
+
+// Everyone sees the same phrase on the same day. Days are grouped into
+// cycles as long as the list; each cycle shows every phrase exactly once,
+// in a shuffled order, before any phrase repeats.
 function phraseForDate(phrases, date) {
   if (phrases.length === 0) return null;
-  return phrases[dayNumber(date) % phrases.length];
+  const day = dayNumber(date);
+  const cycle = Math.floor(day / phrases.length);
+  return phrases[cycleOrder(phrases.length, cycle)[day % phrases.length]];
 }
 
 async function showPhraseOfTheDay() {
@@ -100,7 +142,7 @@ async function showPhraseOfTheDay() {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { parseCsv, parsePhrases, dayNumber, phraseForDate };
+  module.exports = { parseCsv, parsePhrases, dayNumber, cycleOrder, phraseForDate };
 } else {
   showPhraseOfTheDay();
 }
